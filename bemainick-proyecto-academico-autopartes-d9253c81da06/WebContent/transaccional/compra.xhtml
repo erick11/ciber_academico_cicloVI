@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<div class="main">
+				<h:form id="form1" prependId="false" class="cbp-mc-form-row">
+					<p:growl id="growl" showDetail="true" life="2000" />
+					<h1>Compra de Autopartes</h1>
+					<div class="cbp-mc-row">
+						<p:outputLabel for="marcaCbo" value="Marca" />
+						<p:selectOneMenu id="marcaCbo"
+							value="#{compraManagedBean.selectedMarca}">
+							<f:selectItem itemLabel="Seleccione una marca" itemValue="" />
+							<f:selectItems value="#{compraManagedBean.marcas}" var="m"
+								itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+							<f:ajax listener="#{compraManagedBean.cargarModelos}"
+								render="modeloCbo autopartesTb datosCompraPnl detallesTb growl" />
+						</p:selectOneMenu>
+						<p:outputLabel for="
+								modeloCbo" value="Modelo" />
+						<p:selectOneMenu id="modeloCbo"
+							value="#{compraManagedBean.selectedModelo}">
+							<f:selectItem itemLabel="Seleccione un modelo" itemValue="" />
+							<f:selectItems value="#{compraManagedBean.modelos}" var="m"
+								itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+							<f:ajax listener="#{compraManagedBean.cargarAutopartes}"
+								render="autopartesTb detallesTb growl" />
+						</p:selectOneMenu>
+						<p:outputLabel for="deliveryCbx" value="Delivery?" />
+						<h:selectBooleanCheckbox id="deliveryCbx"
+							value="#{compraManagedBean.checked}">
+							<f:ajax event="click" render="direccionpnl"
+								execute="direccionpnl" />
+						</h:selectBooleanCheckbox>
+					</div>
+					<div class="cbp-mc-row">
+						<h:panelGroup id="direccionpnl" layout="block">
+							<p:panel style="height:45px;"
+								rendered="#{compraManagedBean.checked}">
+								<p:outputLabel for="direccionEntrega"
+									value="Direccion de entrega"
+									rendered="#{compraManagedBean.checked}" />
+								<p:inputText id="direccionEntrega"
+									value="#{compraManagedBean.direccionentrega}"
+									label="Direccion de entrega"
+									rendered="#{compraManagedBean.checked}">
+									<f:validateLength minimum="2" maximum="50" />
+								</p:inputText>
+							</p:panel>
+						</h:panelGroup>
+
+					</div>
+					<div class="cbp-mc-row">
+						<p:panel id="datosCompraPnl">
+
+							<p:outputLabel for="subtotal" value="SubTotal (S/.)" />
+							<p:inputText id="subtotal" value="#{compraManagedBean.subtotal}"
+								label="SubTotal" disabled="true">
+								<f:convertNumber pattern="#0.00" />
+							</p:inputText>
+							<p:outputLabel for="igv" value="I.G.V. 18% (S/.)" />
+							<p:inputText id="igv" disabled="true"
+								value="#{compraManagedBean.igv}" label="I.G.V.">
+								<f:convertNumber pattern="#0.00" />
+							</p:inputText>
+							<p:outputLabel for="total" value="Total (S/.)" />
+							<p:inputText id="total" disabled="true"
+								value="#{compraManagedBean.total}" label="Total">
+								<f:convertNumber pattern="#0.00" />
+							</p:inputText>
+							<p:commandButton styleClass="cbp-mc-submit"
+								update="growl :confirmationProcesar" value="Procesar"
+								actionListener="#{compraManagedBean.validarProcesar}"
+								oncomplete="if (!args.notValid) PF('confirmationProcesar').show()"
+								title="Procesar" />
+
+						</p:panel>
+					</div>
+					<p:fieldset legend="Agregar autopartes al carrito"
+						style="height:430px;">
+						<h:panelGrid columns="2" style="width:100%;">
+							<p:dataTable id="autopartesTb"
+								value="#{compraManagedBean.listedDetalle}" var="c" rows="10"
+								paginator="true" style="margin-bottom:5px; height:430px;">
+								<f:facet name="header">  
+        						    Autopartes encontradas  
+        						</f:facet>
+								<p:column style="display: none">
+								#{c.autoparte.id}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Nombre</f:facet>
+									<div align="center">#{c.autoparte.nombre}</div>
+
+								</p:column>
+								<p:column>
+									<f:facet name="header">Precio</f:facet>
+									<h:outputText value="#{c.autoparte.precio}" style="float:right">
+										<f:convertNumber currencySymbol="S/." type="currency" />
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">Cantidad (UNI)</f:facet>
+									<div align="center">
+										<p:spinner id="minMax" size="5" value="#{c.cantidad}" min="0"
+											max="1000" />
+									</div>
+								</p:column>
+								<p:column>
+									<div align="center">
+										<p:commandLink styleClass="bp-icon bp-plus-square"
+											title="Agregar"
+											oncomplete="if (!args.notValid) PF('confirmation').show()"
+											update=":form1:growl"
+											actionListener="#{compraManagedBean.loadAddedDetalleCompra(c)}" />
+									</div>
+								</p:column>
+							</p:dataTable>
+							<p:dataTable id="detallesTb"
+								value="#{compraManagedBean.addedDetalle}" var="c"
+								styleClass="order-table" headerClass="order-table-header"
+								rowClasses="order-table-odd-row,order-table-even-row" rows="8"
+								paginator="true" style="margin-bottom:5px; height:430px;">
+								<f:facet name="header">  
+        						    Autopartes agregadas  
+        						</f:facet>
+								<p:column>
+									<f:facet name="header">Modelo</f:facet>
+									<div align="center">#{c.autoparte.modelo.nombre}</div>
+								</p:column>
+								<p:column>
+									<f:facet name="header">Autoparte</f:facet>
+									<div align="center">#{c.autoparte.nombre}</div>
+								</p:column>
+								<p:column>
+									<f:facet name="header">Cantidad (UNI)</f:facet>
+									<div align="center">#{c.cantidad}</div>
+								</p:column>
+								<p:column>
+									<f:facet name="header">SubTotal</f:facet>
+									<h:outputText value="#{c.subtotal}" style="float:right">
+										<f:convertNumber currencySymbol="S/." type="currency" />
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<div align="center">
+										<p:commandLink styleClass="bp-icon bp-icon-trash-o"
+											title="Remover del carrito"
+											oncomplete="PF('confirmationDelete').show()"
+											actionListener="#{compraManagedBean.removeAddedDetalleCompra(c)}" />
+									</div>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</p:fieldset>
+				</h:form>
+				<p:confirmDialog message="¿Desea agregar esta autoparte?"
+					header="Confirmación" severity="alert" widgetVar="confirmation">
+					<h:form id="form2">
+						<h:panelGrid styleClass="panelGridCenter" columns="2">
+							<p:commandButton value="Si"
+								actionListener="#{compraManagedBean.agregarAutoparte()}"
+								oncomplete="PF('confirmation').hide()"
+								update=":form1:autopartesTb, :form1:growl :form1:detallesTb :form1:datosCompraPnl" />
+							<p:commandButton value="No"
+								oncomplete="PF('confirmation').hide()" />
+						</h:panelGrid>
+					</h:form>
+				</p:confirmDialog>
+				<p:confirmDialog message="¿Desea quitar esta autoparte?"
+					header="Confirmación" severity="alert"
+					widgetVar="confirmationDelete">
+					<h:form id="form3">
+						<h:panelGrid styleClass="panelGridCenter" columns="2">
+							<p:commandButton value="Si"
+								actionListener="#{compraManagedBean.removerAutoparte()}"
+								oncomplete="PF('confirmationDelete').hide()"
+								update=":form1:autopartesTb, :form1:growl, :form1:detallesTb :form1:datosCompraPnl" />
+							<p:commandButton value="No"
+								oncomplete="PF('confirmationDelete').hide()" />
+						</h:panelGrid>
+					</h:form>
+				</p:confirmDialog>
+				<p:confirmDialog message="Revise el detalle de su compra"
+					header="Confirmación" widgetVar="confirmationProcesar"
+					id="confirmationProcesar">
+					<h:form id="form4">
+						<p:dataTable id="confirmaTb"
+							value="#{compraManagedBean.addedDetalle}" var="c"
+							styleClass="order-table" headerClass="order-table-header"
+							rowClasses="order-table-odd-row,order-table-even-row"
+							tableStyle="width:auto">
+							<p:column>
+								<f:facet name="header">Modelo</f:facet>
+								#{c.autoparte.modelo.nombre}
+							</p:column>
+							<p:column>
+								<f:facet name="header">Autoparte</f:facet>
+								#{c.autoparte.nombre}
+							</p:column>
+							<p:column>
+								<f:facet name="header">Cantidad (UNI)</f:facet>
+								#{c.cantidad}
+							</p:column>
+							<p:column>
+								<f:facet name="header">SubTotal (S/.)</f:facet>
+								<h:outputText value="#{c.subtotal}" style="float:right">
+									<f:convertNumber currencySymbol="S/." type="currency" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+						<h:panelGrid styleClass="panelGridCenter" columns="2">
+							<p:commandButton value="Pagar" onclick="PF('dialogPago').show()"
+								oncomplete="PF('confirmationProcesar').hide()"
+								update=":form5:costos" />
+							<p:commandButton value="Volver"
+								oncomplete="PF('confirmationProcesar').hide()" />
+						</h:panelGrid>
+					</h:form>
+				</p:confirmDialog>
+
+				<p:confirmDialog message="Seleccione medio de pago" header="Pago"
+					severity="alert" widgetVar="dialogPago" id="dialogPago">
+					<h:form id="form5">
+						<h:panelGrid columns="2" styleClass="panelGridCenter">
+							<p:selectOneRadio id="customRadio" layout="custom"
+								required="true">
+								<f:selectItem itemLabel="Visa" itemValue="visa" />
+								<f:selectItem itemLabel="Mastercard" itemValue="mastercard" />
+							</p:selectOneRadio>
+							<h:panelGrid columns="4">
+								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								<h:graphicImage value="../resources/img/visa.png" />
+								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								<h:graphicImage value="../resources/img/mastercard.png" />
+							</h:panelGrid>
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<p:outputLabel for="numeroTarjeta" value="N° Tarjeta" />
+							<p:inputMask id="numeroTarjeta" mask="9999-9999-9999-9999"
+								required="true" />
+							<p:outputLabel for="cvc" value="CVC" />
+							<p:inputMask id="cvc" mask="999" required="true" />
+						</h:panelGrid>
+						<h:panelGrid columns="2" id="costos" styleClass="panelGridCenter">
+							<h:outputLabel value="SubTotal:" />
+							<h:outputLabel value="#{compraManagedBean.subtotal}"
+								style="font-weight: bold;">
+								<f:convertNumber currencySymbol="S/." type="currency" />
+							</h:outputLabel>
+							<h:outputLabel value="I.G.V.:" />
+							<h:outputLabel value="#{compraManagedBean.igv}"
+								style="font-weight: bold;">
+								<f:convertNumber currencySymbol="S/." type="currency" />
+							</h:outputLabel>
+							<h:outputLabel value="Total:" />
+							<h:outputLabel value="#{compraManagedBean.total}"
+								style="font-weight: bold;">
+								<f:convertNumber currencySymbol="S/." type="currency" />
+							</h:outputLabel>
+						</h:panelGrid>
+						<h:panelGrid styleClass="panelGridCenter" columns="2">
+							<p:commandButton value="Pagar"
+								actionListener="#{compraManagedBean.procesarCompra}"
+								oncomplete="if(args &amp;&amp; !args.validationFailed) PF('dialogPago').hide()"
+								update=":form1" />
+							<p:commandButton value="Cancelar"
+								oncomplete="PF('dialogPago').hide()" />
+						</h:panelGrid>
+					</h:form>
+				</p:confirmDialog>
+			</div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

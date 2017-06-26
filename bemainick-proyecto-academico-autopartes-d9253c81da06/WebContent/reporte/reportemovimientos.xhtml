@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<div class="main">
+				<h:form id="form1" class="cbp-mc-form-row">
+					<p:growl id="growl" showDetail="true" life="1000" />
+					<h1>Reporte de movimientos</h1>
+					<div class="cbp-mc-row">
+						<p:panel style="height:45px;">
+							<p:outputLabel for="marcaCbo" value="Marca" />
+							<p:selectOneMenu id="marcaCbo"
+								value="#{reporteMovimientoManagedBean.selectedMarca}">
+								<f:selectItem itemLabel="Seleccione una marca" itemValue="" />
+								<f:selectItems value="#{reporteMovimientoManagedBean.marcas}"
+									var="m" itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+								<f:ajax listener="#{reporteMovimientoManagedBean.cargarModelos}"
+									render="modeloCbo" />
+							</p:selectOneMenu>
+							<p:outputLabel for="
+								modeloCbo" value="Modelo" />
+							<p:selectOneMenu id="modeloCbo"
+								value="#{reporteMovimientoManagedBean.selectedModelo}">
+								<f:selectItem itemLabel="Seleccione un modelo" itemValue="" />
+								<f:selectItems value="#{reporteMovimientoManagedBean.modelos}"
+									var="m" itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+								<f:ajax
+									listener="#{reporteMovimientoManagedBean.cargarAutopartes}"
+									render="autoparteCbo" />
+							</p:selectOneMenu>
+							<p:outputLabel for="autoparteCbo" value="Autoparte" />
+							<p:selectOneMenu id="autoparteCbo"
+								value="#{reporteMovimientoManagedBean.selectedAutoparte}">
+								<f:selectItem itemLabel="Seleccione autoparte " itemValue="" />
+								<f:selectItems
+									value="#{reporteMovimientoManagedBean.autopartes}" var="m"
+									itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+							</p:selectOneMenu>
+							<p:outputLabel for="autoparteCbx" value="Filtrar por autoparte?" />
+							<h:selectBooleanCheckbox id="autoparteCbx"
+								value="#{reporteMovimientoManagedBean.checked}">
+							</h:selectBooleanCheckbox>
+						</p:panel>
+					</div>
+					<div class="cbp-mc-row">
+						<p:panel>
+							<p:outputLabel for="fechaInicio" value="Fecha de Inicio" />
+							<p:calendar id="fechaInicio"
+								value="#{reporteMovimientoManagedBean.fechaInicio}"
+								label="Fecha de inicio" />
+							<p:outputLabel for="fechaFin" value="Fecha de Fin" />
+							<p:calendar id="fechaFin"
+								value="#{reporteMovimientoManagedBean.fechaFin}"
+								label="Fecha de fin" />
+							<p:commandLink style="padding-left:10px" title="Agregar"
+								styleClass="bp-icon bp-icon-search"
+								actionListener="#{reporteMovimientoManagedBean.buscar}"
+								update="movimientosTb growl" />
+						</p:panel>
+					</div>
+					<h:panelGrid id="datosPnl">
+						<p:fieldset style="margin-bottom:5px; height:430px;">
+							<p:dataTable id="movimientosTb"
+								value="#{reporteMovimientoManagedBean.movimientos}" var="c"
+								rows="10" paginator="true" styleClass="order-table"
+								headerClass="order-table-header"
+								rowClasses="order-table-odd-row,order-table-even-row"
+								tableStyle="width:auto">
+								<p:column>
+									<f:facet name="header">Id</f:facet>
+								#{c.id}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Marca</f:facet>
+								#{c.autoparte.modelo.marca.nombre}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Modelo</f:facet>
+								#{c.autoparte.modelo.nombre}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Autoparte</f:facet>
+								#{c.autoparte.nombre}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Tipo</f:facet>
+								#{c.tipo == 0 ? 'Entrada' : 'Salida'}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Cantidad</f:facet>
+								#{c.cantidad}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Fecha</f:facet>
+									<h:outputLabel value="#{c.fecha}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
+							</p:dataTable>
+						</p:fieldset>
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

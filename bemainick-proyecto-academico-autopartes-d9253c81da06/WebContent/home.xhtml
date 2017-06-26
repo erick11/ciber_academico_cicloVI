@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<section id="rt-showcase-surround">
+				<div id="rt-showcase" class="slider-container rt-overlay-dark">
+					<div class="rt-container slider-container">
+						<div class="rt-grid-12 rt-alpha rt-omega">
+							<div class='csslider1 autoplay '>
+								<input name="cs_anchor1" id='cs_slide1_0' type="radio"
+									class='cs_anchor slide' /> <input name="cs_anchor1"
+									id='cs_slide1_1' type="radio" class='cs_anchor slide' /> <input
+									name="cs_anchor1" id='cs_slide1_2' type="radio"
+									class='cs_anchor slide' /> <input name="cs_anchor1"
+									id='cs_play1' type="radio" class='cs_anchor' checked="true" />
+								<input name="cs_anchor1" id='cs_pause1_0' type="radio"
+									class='cs_anchor pause' /> <input name="cs_anchor1"
+									id='cs_pause1_1' type="radio" class='cs_anchor pause' /> <input
+									name="cs_anchor1" id='cs_pause1_2' type="radio"
+									class='cs_anchor pause' />
+
+								<ul>
+									<li class="cs_skeleton"><img
+										src="#{resource['img/1.jpg']}" style="width: 100%;" /></li>
+									<li class='num0 img slide'><img
+										src="#{resource['img/1.jpg']}" title='Calidad' /></li>
+									<li class='num1 img slide'><img
+										src="#{resource['img/2.jpg']}" title='Descuentos' /></li>
+									<li class='num2 img slide'><img
+										src="#{resource['img/3.jpg']}" title='Rapidez' /></li>
+
+								</ul>
+								<div class='cs_description'>
+									<label class='num0'> <span class="cs_title"><span
+											class="cs_wrapper">Calidad</span></span> <br /> <span
+										class="cs_descr"><span class="cs_wrapper">Mejor
+												calidad y buen precio</span></span>
+									</label> <label class='num1'> <span class="cs_title"><span
+											class="cs_wrapper">Descuentos</span></span> <br /> <span
+										class="cs_descr"><span class="cs_wrapper">90% en
+												marcas de lujo</span></span>
+									</label> <label class='num2'> <span class="cs_title"><span
+											class="cs_wrapper">Rapidez</span></span> <br /> <span
+										class="cs_descr"><span class="cs_wrapper">Entrega
+												segura e inmediata</span></span>
+									</label>
+								</div>
+								<div class='cs_play_pause'>
+									<label class='cs_play' for='cs_play1'><span><i></i></span></label>
+									<label class='cs_pause num0' for='cs_pause1_0'><span><i></i></span></label>
+									<label class='cs_pause num1' for='cs_pause1_1'><span><i></i></span></label>
+									<label class='cs_pause num2' for='cs_pause1_2'><span><i></i></span></label>
+
+								</div>
+								<div class='cs_arrowprev'>
+									<label class='num0' for='cs_slide1_0'><span><i></i></span></label>
+									<label class='num1' for='cs_slide1_1'><span><i></i></span></label>
+									<label class='num2' for='cs_slide1_2'><span><i></i></span></label>
+								</div>
+								<div class='cs_arrownext'>
+									<label class='num0' for='cs_slide1_0'><span><i></i></span></label>
+									<label class='num1' for='cs_slide1_1'><span><i></i></span></label>
+									<label class='num2' for='cs_slide1_2'><span><i></i></span></label>
+								</div>
+
+								<div class='cs_bullets'>
+									<label class='num0' for='cs_slide1_0'> <span
+										class='cs_point'></span> <span class='cs_thumb'><img
+											src="#{resource['img/1_mini.jpg']}"
+											title='Calidad' /></span>
+									</label> <label class='num1' for='cs_slide1_1'> <span
+										class='cs_point'></span> <span class='cs_thumb'><img
+											src="#{resource['img/2_mini.jpg']}"
+											title='Descuentos' /></span>
+									</label> <label class='num2' for='cs_slide1_2'> <span
+										class='cs_point'></span> <span class='cs_thumb'><img
+											src="#{resource['img/3_mini.jpg']}"
+											title='Rapidez' /></span>
+									</label>
+								</div>
+
+							</div>
+
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</section>
+
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

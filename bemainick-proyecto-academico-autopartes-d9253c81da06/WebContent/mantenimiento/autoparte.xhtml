@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<div class="main">
+				<h:form id="form1" class="cbp-mc-form-row">
+					<p:growl id="growl" showDetail="true" life="1000" />
+					<h1>Mantenimiento de Autopartes</h1>
+					<div class="cbp-mc-row">
+						<p:panel>
+							<p:outputLabel for="marcaCbo" value="Marca:" />
+							<p:selectOneMenu id="marcaCbo"
+								value="#{autoparteManagedBean.selectedMarca}">
+								<f:selectItem itemLabel="Seleccione una marca" itemValue="" />
+								<f:selectItems value="#{autoparteManagedBean.marcas}" var="m"
+									itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+								<f:ajax listener="#{autoparteManagedBean.cargarModelos}"
+									render="modeloCbo autopartesTb growl" />
+							</p:selectOneMenu>
+							<p:outputLabel for="modeloCbo" value="Modelo:" />
+							<p:selectOneMenu id="modeloCbo"
+								value="#{autoparteManagedBean.selectedModelo}"
+								style="margin-right:10px">
+								<f:selectItem itemLabel="Seleccione un modelo" itemValue="" />
+								<f:selectItems value="#{autoparteManagedBean.modelos}" var="m"
+									itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+								<f:ajax listener="#{autoparteManagedBean.cargarAutopartes}"
+									render="autopartesTb growl" />
+							</p:selectOneMenu>
+							<p:commandLink title="Crear" styleClass="bp-icon bp-plus-square"
+								actionListener="#{autoparteManagedBean.loadCrearAutoparte()}"
+								update=":modificarAutoparteDialog, growl"
+								oncomplete="if (!args.notValid) PF('modificarAutoparteDialog').show()" />
+
+
+						</p:panel>
+					</div>
+					<h:panelGrid>
+						<p:fieldset style="margin-bottom:5px; height:430px;">
+							<p:dataTable id="autopartesTb"
+								value="#{autoparteManagedBean.autopartes}" var="c"
+								styleClass="order-table" headerClass="order-table-header"
+								rowClasses="order-table-odd-row,order-table-even-row"
+								tableStyle="width:auto" rows="8" paginator="true"
+								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+								<p:column style="display: none">
+								#{c.id}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Nombre</f:facet>
+								#{c.nombre}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Precio</f:facet>
+									<h:outputText value="#{c.precio}" style="float:right">
+										<f:convertNumber currencySymbol="S/." type="currency" />
+									</h:outputText>
+
+								</p:column>
+								<p:column>
+									<f:facet name="header">Stock (UNI)</f:facet>
+								#{c.stock}
+							</p:column>
+								<p:column>
+									<f:facet name="header"></f:facet>
+									<p:commandLink styleClass="bp-icon bp-icon-pencil"
+										title="Modificar"
+										oncomplete="PF('modificarAutoparteDialog').show()"
+										actionListener="#{autoparteManagedBean.loadModifiedAutoparte(c)}"
+										update=":modificarAutoparteDialog" />
+								</p:column>
+								<p:column>
+									<f:facet name="header"></f:facet>
+									<p:commandLink onclick="PF('confirmation').show()"
+										styleClass="bp-icon bp-icon-trash-o" title="Eliminar"
+										actionListener="#{autoparteManagedBean.loadDeletedAutoparte(c)}" />
+								</p:column>
+							</p:dataTable>
+						</p:fieldset>
+					</h:panelGrid>
+
+				</h:form>
+			</div>
+			<p:confirmDialog message="¿Desea eliminar la autoparte?"
+				header="Confirmación" severity="alert" widgetVar="confirmation">
+				<h:form id="form2">
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
+						<p:commandButton value="Si"
+							actionListener="#{autoparteManagedBean.eliminar()}"
+							oncomplete="PF('confirmation').hide()"
+							update=" :form1:autopartesTb, :form1:growl" />
+						<p:commandButton value="No" onclick="PF('confirmation').hide()"
+							type="submit" />
+					</h:panelGrid>
+				</h:form>
+			</p:confirmDialog>
+			<p:dialog id="modificarAutoparteDialog"
+				header="#{autoparteManagedBean.modifiedAutoparte.id != null ? 'Modificar autoparte' : 'Crear autoparte'}"
+				widgetVar="modificarAutoparteDialog" appendToBody="true"
+				modal="true" resizable="false" draggable="false" closable="false">
+				<h:form id="form3">
+					<h:panelGrid id="pnlDatosPersonales" columns="2">
+						<p:fieldset legend="Datos de autoparte"
+							style="margin-bottom:20px;">
+							<h:inputHidden
+								value="#{autoparteManagedBean.modifiedAutoparte.id}" />
+							<h:panelGrid columns="3" styleClass="panelGridCenter">
+								<p:outputLabel for="nombreAutoparte" value="Nombre:" />
+								<p:inputText id="nombreAutoparte"
+									value="#{autoparteManagedBean.modifiedAutoparte.nombre}"
+									required="true" label="Nombre">
+									<f:validateLength minimum="2" maximum="20" />
+								</p:inputText>
+								<p:message for="nombreAutoparte" />
+								<p:outputLabel for="precioAutoparte" value="Precio S/.:" />
+								<p:inputText id="precioAutoparte"
+									value="#{autoparteManagedBean.modifiedAutoparte.precio}"
+									required="true" label="Precio">
+									<f:validateDoubleRange minimum="1.0" maximum="500.0" />
+								</p:inputText>
+								<p:message for="precioAutoparte" />
+								<p:outputLabel for="stockAutoparte" value="Stock:" />
+								<p:inputText id="stockAutoparte"
+									value="#{autoparteManagedBean.modifiedAutoparte.stock}"
+									required="true" label="Stock">
+									<f:validateDoubleRange minimum="0" />
+								</p:inputText>
+								<p:message for="stockAutoparte" />
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
+						<p:commandButton styleClass="panelGridCenter" value="Procesar"
+							actionListener="#{autoparteManagedBean.modificar()}"
+							oncomplete="if(args &amp;&amp; !args.validationFailed) PF('modificarAutoparteDialog').hide()"
+							update=":form1:autopartesTb :form1:growl pnlDatosPersonales" />
+						<p:commandButton styleClass="
+							panelGridCenter"
+							process="@this" onclick="PF('modificarAutoparteDialog').hide()"
+							value="Cerrar">
+							<p:resetInput target="form3" />
+						</p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</p:dialog>
+		</ui:define>
+	</ui:composition>
+
+</body>
+</html>

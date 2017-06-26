@@ -1,0 +1,168 @@
+@CHARSET "ISO-8859-1";
+
+.myTable td:nth-child(1) {
+	width: 20px;
+}
+
+.panelGridCenter {
+	margin: 0 auto;
+	vertical-align: top;
+}
+
+.panelData {
+	width: 70%;
+}
+
+.inputSearch {
+	width: 300px;
+}
+
+.columnPanelGrid {
+	vertical-align: top;
+}
+
+.menuItems {
+	vertical-align: top;
+	width: 400px;
+	margin: 10px auto 0px auto;
+}
+
+.menuItems a {
+	display: inline;
+	float: none;
+}
+
+
+
+.ui-button.ui-state-default[type="submit"] {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	background: #47a3da;
+	border: none;
+	width: auto;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	border-radius: 10px;
+	letter-spacing: 1px;
+	color: #fff;
+	cursor: pointer;
+}
+
+label {
+	color: #47a3da;
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+}
+
+.ui-button.ui-state-hover[type="submit"] {
+	background: #1478b1;
+}
+
+.ui-button.ui-state-default[type="submit"] {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	background: #47a3da;
+	border: none;
+	width: auto;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	border-radius: 10px;
+	letter-spacing: 1px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.ui-paginator {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	border-color: #47a3da;
+	background: #47a3da;
+}
+
+.ui-column-title {
+	color: #47a3da;
+}
+
+.ui-datatable {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	color: #47a3da;
+	font-size: 0.9em;
+}
+
+.ui-datatable .ui-datatable-header {
+	background: #47a3da;
+	border: 0px none;
+}
+
+.ui-datatable .ui-datatable-even {
+	color: #47a3da;
+}
+
+.ui-datatable .ui-datatable-odd {
+	color: #47a3da;
+}
+
+.ui-button.ui-state-hover[type="submit"] {
+	background: #1478b1;
+}
+
+.ui-fieldset .ui-fieldset-legend {
+	padding: 0.5em 1em;
+	color: #fff;
+	background: #47a3da;
+}
+
+.ui-selectonemenu option {
+	color: #47a3da;
+}
+
+.ui-selectonemenu {
+	padding: 0px 20px 0px 10px;
+	color: #47a3da;
+	font-size: 0.9em;
+	text-transform: uppercase;
+	cursor: pointer;
+	width:110%;	
+	float: left;
+}
+
+.ui-selectonemenu-label {
+	color: #47a3da;
+	font-size: 0.9em;
+	text-transform: uppercase;
+	cursor: pointer;
+	float: left;
+}
+
+.ui-datatable table, .ui-datatable-resizable table {
+	table-layout: auto !important;
+}
+
+.ui-outputlabel {
+	padding: 5px 10px 5px 20px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+	float: left;
+	color: #47a3da;
+}
+
+.ui-selectonemenu-list {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	background: transparent;
+	color: #47a3da;
+	font-size: 9em;
+}
+
+.ui-spinner .ui-spinner-input {
+	color: #47a3da;
+}
+
+.ui-dialog {
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	color: #47a3da;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+	background: #47a3da;
+	color: #fff;
+}

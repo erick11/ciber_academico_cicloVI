@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<div class="main">
+				<h:form id="form1" class="cbp-mc-form-row">
+					<p:growl id="growl" showDetail="true" life="1000" />
+					<h1>Mantenimiento de Modelos por Marca</h1>
+					<div class="cbp-mc-row">
+						<p:panel>
+							<p:outputLabel for="marcaCbo" value="Marca" />
+							<p:selectOneMenu id="marcaCbo"
+								value="#{modeloManagedBean.selectedMarca}"
+								style="margin-right:10px">
+								<f:selectItem itemLabel="Seleccione una marca" itemValue="" />
+								<f:selectItems value="#{modeloManagedBean.marcas}" var="m"
+									itemLabel="#{m.nombre}" itemValue="#{m.id}" />
+								<f:ajax listener="#{modeloManagedBean.cargarModelos}"
+									render="modelosTb growl" />
+							</p:selectOneMenu>
+							<p:commandLink title="Crear" styleClass="bp-icon bp-plus-square"
+								actionListener="#{modeloManagedBean.loadCrearModelo()}"
+								update=":modificarModeloDialog growl"
+								oncomplete="if (!args.notValid) PF('modificarModeloDialog').show()" />
+
+						</p:panel>
+					</div>
+
+					<h:panelGrid id="datosPnl">
+						<p:fieldset style="margin-bottom:5px; height:430px;">
+							<p:dataTable id="modelosTb" value="#{modeloManagedBean.modelos}"
+								var="c" rows="10" paginator="true" styleClass="order-table"
+								headerClass="order-table-header"
+								rowClasses="order-table-odd-row,order-table-even-row"
+								tableStyle="width:auto">
+								<p:column style="display: none">
+								#{c.id}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Nombre</f:facet>
+								#{c.nombre}
+							</p:column>
+								<p:column>
+									<f:facet name="header"></f:facet>
+									<p:commandLink styleClass="bp-icon bp-icon-pencil"
+										title="Modificar"
+										oncomplete="PF('modificarModeloDialog').show()"
+										actionListener="#{modeloManagedBean.loadModifiedModelo(c)}"
+										update=":modificarModeloDialog" />
+								</p:column>
+								<p:column>
+									<f:facet name="header"></f:facet>
+									<p:commandLink onclick="PF('confirmation').show()"
+										styleClass="bp-icon bp-icon-trash-o" title="Eliminar"
+										actionListener="#{modeloManagedBean.loadDeletedModelo(c)}" />
+								</p:column>
+							</p:dataTable>
+						</p:fieldset>
+					</h:panelGrid>
+
+				</h:form>
+			</div>
+			<p:confirmDialog
+				message="¿Desea eliminar el modelo y todas sus autopartes relacionadas?"
+				header="Confirmación" severity="alert" widgetVar="confirmation">
+				<h:form id="form2">
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
+						<p:commandButton value="Si"
+							actionListener="#{modeloManagedBean.eliminar()}"
+							oncomplete="PF('confirmation').hide()"
+							update=" :form1:modelosTb, :form1:growl" />
+						<p:commandButton value="No" onclick="PF('confirmation').hide()"
+							type="submit" />
+					</h:panelGrid>
+				</h:form>
+			</p:confirmDialog>
+			<p:dialog id="modificarModeloDialog"
+				header="#{modeloManagedBean.modifiedModelo.id != null ? 'Modificar modelo' : 'Crear modelo'}"
+				widgetVar="modificarModeloDialog" appendToBody="true" modal="true"
+				resizable="false" draggable="false" closable="false">
+				<h:form id="form3">
+					<h:panelGrid id="pnlDatosPersonales" columns="2">
+						<p:fieldset legend="Datos de modelo" style="margin-bottom:20px;">
+							<h:inputHidden value="#{modeloManagedBean.modifiedModelo.id}" />
+							<h:panelGrid columns="3" styleClass="panelGridCenter">
+								<p:outputLabel for="nombreModelo" value="Nombre:" />
+								<p:inputText id="nombreModelo"
+									value="#{modeloManagedBean.modifiedModelo.nombre}"
+									required="true" label="Nombre">
+									<f:validateLength minimum="2" maximum="20" />
+								</p:inputText>
+								<p:message for="nombreModelo" />
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
+						<p:commandButton styleClass="panelGridCenter" value="Procesar"
+							actionListener="#{modeloManagedBean.modificar()}"
+							oncomplete="if(args &amp;&amp; !args.validationFailed) PF('modificarModeloDialog').hide()"
+							update=":form1:modelosTb,:form1:growl, pnlDatosPersonales" />
+						<p:commandButton styleClass="
+							panelGridCenter"
+							onclick="PF('modificarModeloDialog').hide()" value="Cerrar"
+							process="@this">
+							<p:resetInput target="form3" />
+						</p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</p:dialog>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

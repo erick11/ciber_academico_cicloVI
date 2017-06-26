@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<div class="main">
+				<h:form id="form1" class="cbp-mc-form-row">
+					<p:growl id="growl" showDetail="true" life="1000" />
+					<h1>Mis entregas</h1>
+					<p:panel>
+						<div class="cbp-mc-row">
+							<p:outputLabel for="fechaInicio" value="Fecha de Inicio" />
+							<p:calendar id="fechaInicio"
+								value="#{misEntregasManagedBean.fechaInicio}"
+								label="Fecha de inicio" />
+							<p:outputLabel for="fechaFin" value="Fecha de Fin" />
+							<p:calendar id="fechaFin"
+								value="#{misEntregasManagedBean.fechaFin}" label="Fecha de fin" />
+							<p:commandLink style="padding-left:10px" title="Agregar"
+								styleClass="bp-icon bp-icon-search"
+								actionListener="#{misEntregasManagedBean.buscar}"
+								update="comprasTb growl" />
+						</div>
+					</p:panel>
+					<h:panelGrid id="datosPnl">
+						<p:fieldset style="margin-bottom:5px; height:430px;">
+							<p:dataTable id="comprasTb"
+								value="#{misEntregasManagedBean.compras}" var="c" rows="10"
+								paginator="true" styleClass="order-table"
+								headerClass="order-table-header"
+								rowClasses="order-table-odd-row,order-table-even-row"
+								tableStyle="width:auto">
+								<p:column>
+									<f:facet name="header">Nro. de Comprobante</f:facet>
+								#{c.numeroComprobante}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Cliente</f:facet>
+								#{c.cliente.nombre}
+							</p:column>
+								<p:column>
+									<f:facet name="header">Total</f:facet>
+									<h:outputText value="#{c.total}" style="float:right">
+										<f:convertNumber currencySymbol="S/." type="currency" />
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">SubTotal</f:facet>
+									<h:outputText value="#{c.subtotal}" style="float:right">
+										<f:convertNumber currencySymbol="S/." type="currency" />
+									</h:outputText>
+
+								</p:column>
+								<p:column>
+									<f:facet name="header">I.G.V.</f:facet>
+									<h:outputText value="#{c.igv}" style="float:right">
+										<f:convertNumber currencySymbol="S/." type="currency" />
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">Fecha de Compra</f:facet>
+									<h:outputLabel value="#{c.fechaCompra}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+
+								</p:column>
+								<p:column>
+									<f:facet name="header"></f:facet>
+									<p:commandLink styleClass="bp-icon bp-icon-search"
+										title="Ver detalle" oncomplete="PF('verDetalleDialog').show()"
+										actionListener="#{misEntregasManagedBean.loadSelectedCompra(c)}"
+										update=":verDetalleDialog" />
+								</p:column>
+							</p:dataTable>
+						</p:fieldset>
+					</h:panelGrid>
+				</h:form>
+			</div>
+
+			<p:dialog id="verDetalleDialog"
+				header="Detalle de compra seleccionada" widgetVar="verDetalleDialog"
+				appendToBody="true" modal="true" resizable="false" draggable="false"
+				closable="false">
+				<h:form id="form2">
+					<p:fieldset style="margin-bottom:20px;padding-bottom:20px">
+						<h:panelGrid columns="2">
+							<h:outputLabel value="Nro. de comprobante: " />
+							<h:outputLabel
+								value="#{misEntregasManagedBean.selectedCompra.numeroComprobante}"
+								style="font-weight: bold;" />
+							<h:outputLabel value="Cliente: " />
+							<h:outputLabel
+								value="#{misEntregasManagedBean.selectedCompra.cliente.nombre}"
+								style="font-weight: bold;" />
+							<h:outputLabel value="Total: " />
+							<h:outputLabel
+								value="#{misEntregasManagedBean.selectedCompra.total}"
+								style="font-weight: bold;">
+								<f:convertNumber currencySymbol="S/." type="currency" />
+							</h:outputLabel>
+							<h:outputLabel value="SubTotal: " />
+							<h:outputLabel
+								value="#{misEntregasManagedBean.selectedCompra.subtotal}"
+								style="font-weight: bold;">
+								<f:convertNumber currencySymbol="S/." type="currency" />
+							</h:outputLabel>
+							<h:outputLabel value="I.G.V.: " />
+							<h:outputLabel
+								value="#{misEntregasManagedBean.selectedCompra.igv}"
+								style="font-weight: bold;">
+								<f:convertNumber currencySymbol="S/." type="currency" />
+							</h:outputLabel>
+						</h:panelGrid>
+					</p:fieldset>
+					<p:fieldset style="margin-bottom:20px;padding-bottom:20px">
+						<p:dataTable id="comprasTb"
+							value="#{misEntregasManagedBean.selectedCompra.detallesCompra}"
+							var="c" styleClass="order-table" headerClass="order-table-header"
+							rowClasses="order-table-odd-row,order-table-even-row"
+							tableStyle="width:auto">
+							<p:column>
+								<f:facet name="header">Marca</f:facet>
+								#{c.autoparte.modelo.marca.nombre}
+							</p:column>
+							<p:column>
+								<f:facet name="header">Modelo</f:facet>
+								#{c.autoparte.modelo.nombre}
+							</p:column>
+							<p:column>
+								<f:facet name="header">Autoparte</f:facet>
+								#{c.autoparte.nombre}
+							</p:column>
+							<p:column>
+								<f:facet name="header">Cantidad</f:facet>
+								#{c.cantidad}
+							</p:column>
+							<p:column>
+								<f:facet name="header">SubTotal (S/.)</f:facet>
+								<h:outputText value="#{c.subtotal}" style="float:right">
+									<f:convertNumber currencySymbol="S/." type="currency" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:fieldset>
+					<h:panelGrid styleClass="panelGridCenter">
+						<p:commandButton styleClass="
+							panelGridCenter"
+							onclick="PF('verDetalleDialog').hide()" value="Cerrar"
+							process="@this">
+							<p:resetInput target="form2" />
+						</p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</p:dialog>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

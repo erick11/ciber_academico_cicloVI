@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+	<ui:composition>
+
+		<h:form>
+			<div class="container">
+
+				<header class="clearfix"> <span>Autopartes <span
+					class="bp-icon bp-icon-about"
+					data-content="Somos una empresa que fue constituida con el fin de brindar un servicio de calidad a todos nuestros clientes y brindarles las autopartes que necesiten en casi todas las marcas"></span></span>
+				<h1>Car Utils</h1>
+				<nav> <p:commandLink title="Seguir comprando"
+					styleClass="bp-icon bp-icon-shopping-cart"
+					actionListener="#{navigationController.showPage}">
+					<span>Carro de compras</span>
+					<f:param name="pageId" value="view_transaccional_compra" />
+				</p:commandLink> <p:commandLink title="Perfil" styleClass="bp-icon bp-icon-user">
+					<span>Perfil</span>
+					<f:param name="pageId" value="view_portada" />
+				</p:commandLink> <p:commandLink title="Cerrar Sesion"
+					styleClass="bp-icon bp-icon-drop"
+					action="#{loginManagedBean.cerrarSesion()}">
+					<span>Cerrar sesion</span>
+					<f:param name="pageId" value="view_portada" />
+				</p:commandLink> <h:outputText style="margin-left:20px; position: relative;"
+					value="Bienvenido #{sessionScope.usuario.nombre}" /> </nav> </header>
+				<ul id="cbp-tm-menu" class="cbp-tm-menu">
+					<li><p:commandLink styleClass="cbp-tm-icon-home"
+							actionListener="#{navigationController.showPage}">
+							<h:outputText value="Portada" />
+							<f:param name="pageId" value="view_portada" />
+						</p:commandLink></li>
+					<h:panelGroup
+						rendered="#{sessionScope.usuario.tipoUsuario.id == 1}">
+						<li><p:link value="Mantenimiento"
+								styleClass="cbp-tm-icon-th-list" />
+							<ul class="cbp-tm-submenu">
+								<li><p:commandLink styleClass="cbp-tm-icon-cog"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Usuarios" />
+										<f:param name="pageId" value="view_mantenimiento_usuario" />
+									</p:commandLink></li>
+								<li><p:commandLink styleClass="cbp-tm-icon-cog"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Clientes" />
+										<f:param name="pageId" value="view_mantenimiento_cliente" />
+									</p:commandLink></li>
+								<li><p:commandLink styleClass="cbp-tm-icon-cog"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Autopartes" />
+										<f:param name="pageId" value="view_mantenimiento_autoparte" />
+									</p:commandLink></li>
+								<li><p:commandLink styleClass="cbp-tm-icon-cog"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Modelos" />
+										<f:param name="pageId" value="view_mantenimiento_modelo" />
+									</p:commandLink></li>
+								<li><p:commandLink styleClass="cbp-tm-icon-cog"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Marcas" />
+										<f:param name="pageId" value="view_mantenimiento_marca" />
+									</p:commandLink></li>
+							</ul></li>
+					</h:panelGroup>
+					<h:panelGroup
+						rendered="#{sessionScope.usuario.tipoUsuario.id == 1}">
+						<li><p:link value="Reportes" styleClass="cbp-tm-icon-th-list" />
+							<ul class="cbp-tm-submenu">
+								<li><p:commandLink styleClass="cbp-tm-icon-area-chart"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Compras" />
+										<f:param name="pageId" value="view_reporte_compras" />
+									</p:commandLink></li>
+								<li><p:commandLink styleClass="cbp-tm-icon-area-chart"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Movimientos" />
+										<f:param name="pageId" value="view_reporte_movimiento" />
+									</p:commandLink></li>
+								<li><p:commandLink styleClass="cbp-tm-icon-area-chart"
+										actionListener="#{navigationController.showPage}">
+										<h:outputText value="Autopartes mas vendidas" />
+										<f:param name="pageId" value="view_reporte_mas_vendidas" />
+									</p:commandLink></li>
+							</ul></li>
+					</h:panelGroup>
+					<li><p:link value="Consultas" styleClass="cbp-tm-icon-th-list" />
+						<ul class="cbp-tm-submenu">
+							<h:panelGroup
+								rendered="#{sessionScope.usuario.tipoUsuario.id != 3}">
+								<li><p:commandLink styleClass="cbp-tm-icon-search-plus"
+										action="#{navigationController.showPage}">
+										<h:outputText value="Mis compras" />
+										<f:param name="pageId" value="view_consulta_miscompras" />
+									</p:commandLink></li>
+							</h:panelGroup>
+							<h:panelGroup
+								rendered="#{sessionScope.usuario.tipoUsuario.id != 2}">
+								<li><p:commandLink styleClass="cbp-tm-icon-search-plus"
+										action="#{navigationController.showPage}">
+										<h:outputText value="Mis entregas" />
+										<f:param name="pageId" value="view_consulta_misentregas" />
+									</p:commandLink></li>
+							</h:panelGroup>
+						</ul></li>
+					<h:panelGroup
+						rendered="#{sessionScope.usuario.tipoUsuario.id == 1 or sessionScope.usuario.tipoUsuario.id == 2}">
+						<li><p:commandLink styleClass="cbp-tm-icon-shopping-cart"
+								actionListener="#{navigationController.showPage}">
+								<h:outputText value="Comprar" />
+								<f:param name="pageId" value="view_transaccional_compra" />
+							</p:commandLink></li>
+					</h:panelGroup>
+					<h:panelGroup
+						rendered="#{sessionScope.usuario.tipoUsuario.id == 1 or sessionScope.usuario.tipoUsuario.id == 3}">
+						<li><p:commandLink styleClass="cbp-tm-icon-book"
+								actionListener="#{navigationController.showPage}">
+								<h:outputText value="Entregas" />
+								<f:param name="pageId" value="view_transaccional_entregas" />
+							</p:commandLink></li>
+					</h:panelGroup>
+				</ul>
+
+			</div>
+			<h:outputScript name="cbpTooltipMenu.js" library="js" />
+
+			<script>
+				var menu = new cbpTooltipMenu(document
+						.getElementById('cbp-tm-menu'));
+			</script>
+		</h:form>
+	</ui:composition>
+</body>
+
+</html>

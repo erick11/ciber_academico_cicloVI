@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="refresh" content="4000" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title><ui:insert name="title">Autopartes Pepon | Venta de Autopartes</ui:insert></title>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['img/favicon.ico']}" />
+	<link
+		href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700'
+		rel='stylesheet' type='text/css' />
+	
+	<h:outputStylesheet name="login.css" library="css" />
+
+	<script type="application/x-javascript">
+	 addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+	</script>
+	<link
+		href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700'
+		rel='stylesheet' type='text/css' />
+</h:head>
+<h:body>
+	<h1>Autopartes Car Utils</h1>
+	<div class="login">
+
+		<div class="ribbon-wrapper h2 ribbon-red">
+			<div class="ribbon-front">
+				<h2>Login</h2>
+			</div>
+			<div class="ribbon-edge-topleft2"></div>
+			<div class="ribbon-edge-bottomleft"></div>
+		</div>
+		<h:form>
+			<p:growl id="growl" showDetail="true" life="1000" />
+			<ul>
+				<li><p:inputText type="text" class="text" autocomplete="off" id="usuariotxt"
+						value="#{loginManagedBean.usuario}" /><a href="#"
+					class=" icon user"></a></li>
+				<p:watermark for="usuariotxt" value="Usuario" />
+				<li><p:inputText type="password" id="contrasenatxt" autocomplete="off"
+						value="#{loginManagedBean.contrasena}" /><a href="#"
+					class=" icon lock"></a></li>
+				<p:watermark for="contrasenatxt" value="Contrasena" />
+			</ul>
+
+			<div class="submit">
+				<p:commandButton value="Ingresar"
+					action="#{loginManagedBean.autenticar()}" update="growl" />
+
+			</div>
+		</h:form>
+	</div>
+	<!--start-copyright-->
+	<div class="copy-right">
+		<p>
+			Copyright 2015 Todos los derechos reservados | Autopartes <a
+				href="#">Car Utils</a>
+		</p>
+	</div>
+
+</h:body>
+
+</html>
